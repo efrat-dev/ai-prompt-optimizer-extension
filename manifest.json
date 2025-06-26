@@ -3,24 +3,42 @@
   "name": "GPT Prompt Optimizer",
   "version": "1.0",
   "description": "Optimize your GPT prompt before sending",
-  "permissions": ["storage", "scripting", "activeTab"],
-  "host_permissions": ["https://chat.openai.com/*"],
+  "permissions": [
+    "storage",
+    "scripting",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://chat.openai.com/*",
+    "https://api.openai.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://claude.ai/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "type": "module"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "dom-manager.js",
+        "api-service.js",
+        "optimize-button.js",
+        "button-styles.js",
+        "prompt.md"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon.png"
   },
-  "content_scripts": [
-    {
-      "matches": ["https://chatgpt.com/*"],
-      "js": ["content.js"],
-      "run_at": "document_idle"
-    }
-  ],
-  "options_page": "settings.html",  
-  "web_accessible_resources": [
-    {
-      "resources": ["prompt.md"],
-      "matches": ["<all_urls>"]
-    }
-  ]
+  "options_page": "settings.html"
 }
