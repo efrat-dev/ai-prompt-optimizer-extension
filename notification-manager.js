@@ -8,7 +8,7 @@ export class NotificationManager {
     injectCSS() {
       if (this.cssInjected) return;
       
-      const cssUrl = chrome.runtime.getURL('notifications.css');
+      const cssUrl = chrome.runtime.getURL('css/notifications.css');
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = cssUrl;
