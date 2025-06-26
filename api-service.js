@@ -1,10 +1,16 @@
 import { APIProviders } from './api-providers.js';
 
+/**
+ * Main API service for handling prompt optimization across different LLM providers
+ */
 export class APIService {
     constructor() {
       this.temporaryApiKey = null; // Temporary storage for API key from modal
     }
   
+    /**
+     * Retrieve stored configuration data
+     */
     async getStorageData() {
       return new Promise((resolve) => {
         chrome.storage.local.get(["openai_key", "custom_system_prompt", "use_custom_prompt"], (result) => {
@@ -17,14 +23,19 @@ export class APIService {
       });
     }
   
+    /**
+     * Store API key temporarily and optionally persist to storage
+     */
     async setApiKey(apiKey) {
       this.temporaryApiKey = apiKey;
-      // Optional: also save to storage for persistence
       return new Promise((resolve) => {
         chrome.storage.local.set({ openai_key: apiKey }, resolve);
       });
     }
   
+    /**
+     * Auto-detect API provider based on key format
+     */
     detectApiProvider(apiKey) {
       if (apiKey.startsWith('sk-ant-')) {
         return 'anthropic';
@@ -39,6 +50,9 @@ export class APIService {
       }
     }
   
+    /**
+     * Load system prompt from file or use fallback
+     */
     async getSystemPrompt() {
       try {
         const response = await fetch(chrome.runtime.getURL("prompt.md"));
@@ -49,6 +63,9 @@ export class APIService {
       }
     }
   
+    /**
+     * Main function to optimize user input prompt
+     */
     async optimizePrompt(input) {
       const [storageData, defaultPrompt] = await Promise.all([
         this.getStorageData(),
@@ -94,7 +111,9 @@ export class APIService {
       return optimized.trim();
     }
   
-    // Helper function to validate API key
+    /**
+     * Validate API key by making a test request
+     */
     async validateApiKey(apiKey) {
       const provider = this.detectApiProvider(apiKey);
       

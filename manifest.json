@@ -37,7 +37,8 @@
         "prompt.md",
         "templates/modal-template.html",
         "modal-styles.css",
-        "api-providers.js"
+        "api-providers.js",
+        "modal-manager.js"
       ],
       "matches": ["<all_urls>"]
     }

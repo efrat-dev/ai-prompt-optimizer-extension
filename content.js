@@ -1,3 +1,6 @@
+/**
+ * Content script initialization - sets up the optimize button and DOM monitoring
+ */
 (async () => {
   const { DOMManager } = await import('./dom-manager.js');
   const { OptimizeButton } = await import('./optimize-button.js');
@@ -10,6 +13,9 @@
   const maxAttempts = 5;
   let attempts = 0;
 
+  /**
+   * Attempts to add the optimize button with retry logic
+   */
   const tryAddButton = () => {
     attempts++;
     if (optimizeButton.addButton()) {
@@ -18,7 +24,7 @@
     if (attempts < maxAttempts) {
       setTimeout(tryAddButton, 2000); // Retry every 2 seconds
     } else {
-      console.error("❌ Failed to add button after all attempts");
+      console.error("Failed to add button after all attempts");
     }
   };
 

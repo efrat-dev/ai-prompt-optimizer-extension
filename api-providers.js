@@ -1,4 +1,10 @@
+/**
+ * API provider implementations for different LLM services
+ */
 export class APIProviders {
+  /**
+   * Optimize prompt using OpenAI's GPT API
+   */
   static async optimizePromptWithOpenAI(apiKey, systemPrompt, input) {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -26,6 +32,9 @@ export class APIProviders {
     return data.choices?.[0]?.message?.content;
   }
 
+  /**
+   * Optimize prompt using Anthropic's Claude API
+   */
   static async optimizePromptWithAnthropic(apiKey, systemPrompt, input) {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -35,7 +44,7 @@ export class APIProviders {
         "anthropic-version": "2023-06-01"
       },
       body: JSON.stringify({
-        model: "claude-3-haiku-20240307", // Fast and cost-effective model
+        model: "claude-3-haiku-20240307",
         max_tokens: 1000,
         temperature: 0.1,
         system: systemPrompt,

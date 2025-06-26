@@ -1,4 +1,10 @@
+/**
+ * Button styling and interaction utilities
+ */
 export class ButtonStyles {
+    /**
+     * Returns CSS styles for the optimize button
+     */
     static getButtonStyles() {
       return `
         position: fixed;
@@ -17,6 +23,9 @@ export class ButtonStyles {
       `;
     }
   
+    /**
+     * Apply hover effects to button element
+     */
     static applyHoverEffects(button) {
       button.onmouseenter = () => {
         button.style.backgroundColor = "#0d8f6b";
@@ -29,10 +38,13 @@ export class ButtonStyles {
       };
     }
   
+    /**
+     * Toggle button loading state
+     */
     static setLoadingState(button, isLoading = true) {
       if (isLoading) {
         button.disabled = true;
-        button.innerText = "⏳ מעבד...";
+        button.innerText = "⏳ Processing...";
       } else {
         button.disabled = false;
         button.innerText = "⚙️ Optimize";

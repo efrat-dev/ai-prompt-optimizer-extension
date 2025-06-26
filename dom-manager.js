@@ -2,6 +2,7 @@ import { NotificationManager } from './notification-manager.js';
 
 export class DOMManager {
   constructor() {
+    // Common textarea selectors for different chat interfaces
     this.textareaSelectors = [
       'textarea[data-id="root"]',
       'textarea[placeholder*="Message"]',
@@ -10,7 +11,7 @@ export class DOMManager {
       'textarea'
     ];
     
-    // יצירת מנהל התזכורות
+    // Initialize notification manager
     this.notificationManager = new NotificationManager();
   }
 
@@ -18,9 +19,11 @@ export class DOMManager {
     let textarea = null;
     let container = null;
 
+    // Search for textarea using selectors
     for (const selector of this.textareaSelectors) {
       textarea = document.querySelector(selector);
       if (textarea) {
+        // Find appropriate container for the textarea
         const possibleContainers = [
           textarea.closest('form'),
           textarea.closest('div[class*="composer"]'),
@@ -40,12 +43,12 @@ export class DOMManager {
     }
 
     if (!textarea) {
-      console.error("❌ לא נמצאה תיבת טקסט");
+      console.error("❌ Textarea not found");
       return { textarea: null, container: null };
     }
 
     if (!container) {
-      console.warn("⚠️ לא נמצא קונטיינר מתאים, משתמש ב-body");
+      console.warn("⚠️ No suitable container found, using body");
       container = document.body;
     }
 
@@ -63,32 +66,32 @@ export class DOMManager {
       textarea.textContent = content;
     }
     
-    // מפעיל אירוע שינוי כדי שהאתר יזהה את השינוי
+    // Trigger input event so the website detects the change
     const inputEvent = new Event('input', { bubbles: true });
     textarea.dispatchEvent(inputEvent);
     
-    // מפעיל פוקוס על התיבה
+    // Focus on the textarea
     textarea.focus();
   }
 
-  // שיטות התזכורות החדשות
+  // Notification methods
   showSuccessNotification(message = "✅ Prompt Added!") {
     return this.notificationManager.showSuccess(message);
   }
 
-  showErrorNotification(message = "❌ שגיאה התרחשה!") {
+  showErrorNotification(message = "❌ Error occurred!") {
     return this.notificationManager.showError(message);
   }
 
-  showWarningNotification(message = "⚠️ אזהרה!") {
+  showWarningNotification(message = "⚠️ Warning!") {
     return this.notificationManager.showWarning(message);
   }
 
-  showInfoNotification(message = "ℹ️ מידע") {
+  showInfoNotification(message = "ℹ️ Information") {
     return this.notificationManager.showInfo(message);
   }
 
-  // התאמה לגרסה הישנה
+  // Backward compatibility method
   showNotification(message, type = 'success', duration = 3000) {
     return this.notificationManager.showNotification(message, type, duration);
   }
@@ -97,16 +100,16 @@ export class DOMManager {
     return this.notificationManager.clearAll();
   }
 
-  // שיטות נוספות לנוחות
-  showLoadingNotification(message = "⏳ טוען...") {
+  // Additional convenience methods
+  showLoadingNotification(message = "⏳ Loading...") {
     return this.notificationManager.showPersistent(message, 'info');
   }
 
   showApiKeyMissingNotification() {
-    return this.notificationManager.showWarning("🔑 נדרש מפתח API", 5000);
+    return this.notificationManager.showWarning("🔑 API key required", 5000);
   }
 
   showOptimizationCompleteNotification() {
-    return this.notificationManager.showSuccess("🚀 האופטימיזציה הושלמה!", 4000);
+    return this.notificationManager.showSuccess("🚀 Optimization completed!", 4000);
   }
 }
