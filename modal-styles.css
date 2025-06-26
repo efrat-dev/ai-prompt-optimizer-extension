@@ -1,0 +1,121 @@
+/* API Key Modal Styles */
+.gpt-optimize-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  .gpt-optimize-modal {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+    direction: rtl;
+    text-align: right;
+  }
+  
+  .gpt-optimize-modal-header {
+    margin-bottom: 20px;
+  }
+  
+  .gpt-optimize-modal-title {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  .gpt-optimize-modal-subtitle {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  
+  .gpt-optimize-modal-field {
+    margin-bottom: 20px;
+  }
+  
+  .gpt-optimize-modal-label {
+    display: block;
+    margin-bottom: 6px;
+    color: #333;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  .gpt-optimize-modal-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+  
+  .gpt-optimize-modal-input:focus {
+    border-color: #10a37f;
+    outline: none;
+  }
+  
+  .gpt-optimize-modal-input.error {
+    border-color: #ef4444;
+  }
+  
+  .gpt-optimize-modal-tip {
+    margin-bottom: 20px;
+  }
+  
+  .gpt-optimize-modal-tip-content {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #666;
+  }
+  
+  .gpt-optimize-modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+  }
+  
+  .gpt-optimize-modal-btn {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .gpt-optimize-modal-btn-primary {
+    background: #10a37f;
+    color: white;
+  }
+  
+  .gpt-optimize-modal-btn-primary:hover {
+    background: #0d8f6f;
+  }
+  
+  .gpt-optimize-modal-btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+  }
+  
+  .gpt-optimize-modal-btn-secondary:hover {
+    background: #e5e7eb;
+  }

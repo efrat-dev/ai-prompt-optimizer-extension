@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./modal-styles.css">
+</head>
+<body>
+    <div class="gpt-optimize-modal-overlay">
+        <div class="gpt-optimize-modal">
+            <div class="gpt-optimize-modal-header">
+                <h3 class="gpt-optimize-modal-title">🔑 הזן מפתח API</h3>
+                <p class="gpt-optimize-modal-subtitle">
+                    כדי להשתמש בתוסף, יש צורך במפתח API של OpenAI או Anthropic
+                </p>
+            </div>
+
+            <div class="gpt-optimize-modal-field">
+                <label class="gpt-optimize-modal-label">מפתח API:</label>
+                <input 
+                    type="password" 
+                    class="gpt-optimize-modal-input" 
+                    placeholder="הכנס את המפתח שלך..."
+                />
+            </div>
+
+            <div class="gpt-optimize-modal-tip">
+                <div class="gpt-optimize-modal-tip-content">
+                    💡 <strong>עצה:</strong> המפתח יישמר רק במפגש הנוכחי ולא יישלח לשום מקום חוץ מה-API הרשמי
+                </div>
+            </div>
+
+            <div class="gpt-optimize-modal-actions">
+                <button class="gpt-optimize-modal-btn gpt-optimize-modal-btn-primary">
+                    שמור והמשך
+                </button>
+                <button class="gpt-optimize-modal-btn gpt-optimize-modal-btn-secondary">
+                    ביטול
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
