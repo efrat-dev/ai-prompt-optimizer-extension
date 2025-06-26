@@ -36,7 +36,8 @@
         "notifications.css",
         "prompt.md",
         "templates/modal-template.html",
-        "modal-styles.css"
+        "modal-styles.css",
+        "api-providers.js"
       ],
       "matches": ["<all_urls>"]
     }
