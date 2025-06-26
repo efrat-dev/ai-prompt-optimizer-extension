@@ -21,8 +21,8 @@
   max-width: 450px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   position: relative;
-  direction: rtl; /* Right-to-left text direction for Hebrew support */
-  text-align: right;
+  direction: ltr; /* Left-to-right text direction */
+  text-align: left;
 }
 
 .gpt-optimize-modal-header {
@@ -89,7 +89,7 @@
 .gpt-optimize-modal-actions {
   display: flex;
   gap: 10px;
-  justify-content: flex-start;
+  justify-content: flex-end; /* Changed from flex-start to flex-end for LTR */
 }
 
 .gpt-optimize-modal-btn {
