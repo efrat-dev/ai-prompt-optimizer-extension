@@ -1,7 +1,7 @@
 (async () => {
   let lastOptimizedPrompt = ""; // לשמירת הפרומפט המאופטמיזה לצפייה
 
-  const createModal = (content) => {
+  const createEditableModal = (content) => {
     document.querySelector("#gpt-prompt-modal")?.remove();
 
     const modal = document.createElement("div");
@@ -21,39 +21,181 @@
       background: white;
       padding: 20px;
       border-radius: 8px;
-      max-width: 80vw;
-      max-height: 80vh;
-      overflow: auto;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow: hidden;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      white-space: pre-wrap;
       position: relative;
-      line-height: 1.5;
-      font-size: 14px;
+      display: flex;
+      flex-direction: column;
     `;
-    inner.textContent = content;
+
+    // כותרת
+    const header = document.createElement("div");
+    header.style.cssText = `
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    `;
+
+    const title = document.createElement("h3");
+    title.textContent = "Edit Optimized System Prompt";
+    title.style.cssText = `
+      margin: 0;
+      color: #333;
+      font-size: 18px;
+    `;
 
     const closeBtn = document.createElement("button");
     closeBtn.innerText = "✖";
     closeBtn.style.cssText = `
-      position: absolute;
-      top: 8px;
-      right: 12px;
       background: transparent;
       border: none;
       font-size: 20px;
       cursor: pointer;
       color: #666;
+      padding: 5px;
     `;
     closeBtn.onclick = () => modal.remove();
+
+    header.appendChild(title);
+    header.appendChild(closeBtn);
+
+    // אזור העריכה
+    const textarea = document.createElement("textarea");
+    textarea.value = content;
+    textarea.style.cssText = `
+      width: 100%;
+      height: 400px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 13px;
+      line-height: 1.4;
+      resize: vertical;
+      outline: none;
+      margin-bottom: 15px;
+    `;
+
+    // כפתורים
+    const buttonContainer = document.createElement("div");
+    buttonContainer.style.cssText = `
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    `;
+
+    const copyBtn = document.createElement("button");
+    copyBtn.innerText = "📋 Copy to Clipboard";
+    copyBtn.style.cssText = `
+      padding: 8px 16px;
+      background: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    `;
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(textarea.value).then(() => {
+        const originalText = copyBtn.innerText;
+        copyBtn.innerText = "✅ Copied!";
+        setTimeout(() => {
+          copyBtn.innerText = originalText;
+        }, 2000);
+      });
+    };
+
+    const useBtn = document.createElement("button");
+    useBtn.innerText = "🔄 Use as System Prompt";
+    useBtn.style.cssText = `
+      padding: 8px 16px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    `;
+    useBtn.onclick = () => {
+      const editedContent = textarea.value.trim();
+      if (editedContent) {
+        // עדכון הפרומפט המאופטמיזה עם התוכן הערוך
+        lastOptimizedPrompt = editedContent;
+        
+        // שמירה ב-storage כ-system prompt מותאם אישית
+        chrome.storage.local.set({ 
+          custom_system_prompt: editedContent,
+          use_custom_prompt: true 
+        }, () => {
+          const originalText = useBtn.innerText;
+          useBtn.innerText = "✅ Saved!";
+          setTimeout(() => {
+            useBtn.innerText = originalText;
+          }, 2000);
+        });
+      }
+    };
+
+    const replaceBtn = document.createElement("button");
+    replaceBtn.innerText = "📝 Replace Current Text";
+    replaceBtn.style.cssText = `
+      padding: 8px 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    `;
+    replaceBtn.onclick = () => {
+      const editedContent = textarea.value.trim();
+      if (editedContent) {
+        // מחפש את תיבת הטקסט של ChatGPT
+        const chatTextarea = document.querySelector('textarea[data-id="root"]') || 
+                           document.querySelector('textarea[placeholder*="Message"]') ||
+                           document.querySelector('div[contenteditable="true"]') ||
+                           document.querySelector('textarea');
+        
+        if (chatTextarea) {
+          if (chatTextarea.tagName.toLowerCase() === 'textarea') {
+            chatTextarea.value = editedContent;
+          } else {
+            chatTextarea.textContent = editedContent;
+          }
+          
+          // מפעיל אירוע שינוי
+          const event = new Event('input', { bubbles: true });
+          chatTextarea.dispatchEvent(event);
+          
+          modal.remove();
+        } else {
+          alert("לא נמצאה תיבת הטקסט");
+        }
+      }
+    };
+
+    buttonContainer.appendChild(copyBtn);
+    buttonContainer.appendChild(useBtn);
+    buttonContainer.appendChild(replaceBtn);
 
     // סגירה בלחיצה על הרקע
     modal.onclick = (e) => {
       if (e.target === modal) modal.remove();
     };
 
-    inner.appendChild(closeBtn);
+    inner.appendChild(header);
+    inner.appendChild(textarea);
+    inner.appendChild(buttonContainer);
     modal.appendChild(inner);
     document.body.appendChild(modal);
+    
+    // פוקוס על ה-textarea
+    setTimeout(() => textarea.focus(), 100);
   };
 
   const addOptimizeButton = () => {
@@ -146,8 +288,12 @@
 
           const [key, prompt] = await Promise.all([
             new Promise((resolve) => {
-              chrome.storage.local.get(["openai_key"], (result) => {
-                resolve(result.openai_key);
+              chrome.storage.local.get(["openai_key", "custom_system_prompt", "use_custom_prompt"], (result) => {
+                resolve({
+                  key: result.openai_key,
+                  customPrompt: result.custom_system_prompt,
+                  useCustom: result.use_custom_prompt
+                });
               });
             }),
             fetch(chrome.runtime.getURL("prompt.md"))
@@ -155,23 +301,26 @@
               .catch(() => "אתה עוזר מקצועי לשיפור פרומפטים. שפר את הפרומפט הבא:")
           ]);
 
-          if (!key) {
+          if (!key.key) {
             if (confirm("מפתח API לא נמצא. האם תרצה לפתוח את ההגדרות?")) {
               chrome.runtime.sendMessage({ action: "openOptions" });
             }
             return;
           }
 
+          // בחירת הפרומפט - מותאם אישית או ברירת מחדל
+          const systemPrompt = key.useCustom && key.customPrompt ? key.customPrompt : prompt;
+
           const response = await fetch("https://api.openai.com/v1/chat/completions", {
             method: "POST",
             headers: {
-              "Authorization": `Bearer ${key}`,
+              "Authorization": `Bearer ${key.key}`,
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
               model: "gpt-3.5-turbo",
               messages: [
-                { role: "system", content: prompt },
+                { role: "system", content: systemPrompt },
                 { role: "user", content: input }
               ],
               max_tokens: 1000,
@@ -206,7 +355,7 @@
             const eyeBtn = document.createElement("button");
             eyeBtn.id = "gpt-eye-btn";
             eyeBtn.innerText = "👁️";
-            eyeBtn.title = "Show Optimized System Prompt";
+            eyeBtn.title = "הצג את הפרומפט המאופטמיזה (לא מחליף את הטקסט)";
             eyeBtn.style.cssText = `
               position: fixed;
               bottom: 20px;
@@ -235,7 +384,7 @@
             
             eyeBtn.onclick = () => {
               if (lastOptimizedPrompt) {
-                createModal(lastOptimizedPrompt);
+                createEditableModal(lastOptimizedPrompt);
               } else {
                 alert("אין פרומפט מאופטמיזה זמין");
               }
