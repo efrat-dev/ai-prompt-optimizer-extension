@@ -1,5 +1,6 @@
 (async () => {
-  let lastOptimizedPrompt = ""; // לשמירת הפרומפט המאופטמיזה לצפייה
+  let lastOptimizedPrompt = ""; // לשמירת הפרומפט המאופטמיזה
+  let originalSendFunction = null; // לשמירת הפונקציה המקורית
 
   const createEditableModal = (content) => {
     document.querySelector("#gpt-prompt-modal")?.remove();
@@ -198,6 +199,129 @@
     setTimeout(() => textarea.focus(), 100);
   };
 
+  // פונקציה להתערבות בשליחת הודעות
+  const interceptSendMessage = () => {
+    try {
+      // חיפוש כפתור השליחה
+      const sendButton = document.querySelector('button[data-testid="send-button"]') ||
+                        document.querySelector('button[aria-label*="Send"]') ||
+                        document.querySelector('button[title*="Send"]') ||
+                        document.querySelector('form button[type="submit"]') ||
+                        document.querySelector('button:has(svg)');
+
+      if (sendButton) {
+        // הסרת event listeners קודמים
+        const newSendButton = sendButton.cloneNode(true);
+        sendButton.parentNode.replaceChild(newSendButton, sendButton);
+
+        // הוספת event listener חדש
+        newSendButton.addEventListener('click', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          // אם יש פרומפט מאופטמיזה, נכניס אותו לפני הטקסט
+          if (lastOptimizedPrompt) {
+            const textarea = document.querySelector('textarea[data-id="root"]') || 
+                           document.querySelector('textarea[placeholder*="Message"]') ||
+                           document.querySelector('div[contenteditable="true"]') ||
+                           document.querySelector('textarea');
+
+            if (textarea) {
+              const userInput = textarea.value || textarea.textContent || "";
+              
+              // שמירה זמנית של הטקסט המקורי
+              const originalText = userInput;
+              
+              // הכנסת הפרומפט המאופטמיזה + הטקסט המקורי
+              const combinedText = lastOptimizedPrompt + "\n\n" + userInput;
+              
+              // הכנסת הטקסט המשולב
+              if (textarea.tagName.toLowerCase() === 'textarea') {
+                textarea.value = combinedText;
+              } else {
+                textarea.textContent = combinedText;
+              }
+              
+              // מפעיל אירוע שינוי
+              const inputEvent = new Event('input', { bubbles: true });
+              textarea.dispatchEvent(inputEvent);
+              
+              // חכי רגע קצר לפני השליחה
+              setTimeout(() => {
+                // שליחת הטקסט המשולב
+                const form = textarea.closest('form');
+                if (form) {
+                  const submitEvent = new Event('submit', { bubbles: true });
+                  form.dispatchEvent(submitEvent);
+                } else {
+                  // אם אין טופס, נלחץ על כפתור השליחה
+                  const actualSendBtn = document.querySelector('button[data-testid="send-button"]') ||
+                                      document.querySelector('button[aria-label*="Send"]');
+                  if (actualSendBtn) {
+                    actualSendBtn.click();
+                  }
+                }
+                
+                // ניקוי הפרומפט המאופטמיזה אחרי השליחה
+                setTimeout(() => {
+                  lastOptimizedPrompt = "";
+                  // הסרת כפתור העין
+                  document.querySelector("#gpt-eye-btn")?.remove();
+                  console.log("🧹 פרומפט מאופטמיזה נוקה אחרי השליחה");
+                }, 1000);
+                
+              }, 100);
+            }
+          } else {
+            // אם אין פרומפט מאופטמיזה, שליחה רגילה
+            const form = newSendButton.closest('form');
+            if (form) {
+              const submitEvent = new Event('submit', { bubbles: true });
+              form.dispatchEvent(submitEvent);
+            }
+          }
+        });
+      }
+
+      // התערבות בטופס (אם קיים)
+      const form = document.querySelector('form');
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          if (lastOptimizedPrompt) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const textarea = form.querySelector('textarea') || form.querySelector('div[contenteditable="true"]');
+            if (textarea) {
+              const userInput = textarea.value || textarea.textContent || "";
+              const combinedText = lastOptimizedPrompt + "\n\n" + userInput;
+              
+              if (textarea.tagName.toLowerCase() === 'textarea') {
+                textarea.value = combinedText;
+              } else {
+                textarea.textContent = combinedText;
+              }
+              
+              const inputEvent = new Event('input', { bubbles: true });
+              textarea.dispatchEvent(inputEvent);
+              
+              setTimeout(() => {
+                form.submit();
+                setTimeout(() => {
+                  lastOptimizedPrompt = "";
+                  document.querySelector("#gpt-eye-btn")?.remove();
+                }, 1000);
+              }, 100);
+            }
+          }
+        });
+      }
+
+    } catch (error) {
+      console.error("❌ שגיאה בהתערבות בשליחה:", error);
+    }
+  };
+
   const addOptimizeButton = () => {
     try {
       const textareaSelectors = [
@@ -336,9 +460,12 @@
           const optimized = data.choices?.[0]?.message?.content;
 
           if (optimized) {
-            // שמירת הפרומפט המאופטמיזה לצפייה בלבד - לא מחליף את הטקסט
+            // שמירת הפרומפט המאופטמיזה
             lastOptimizedPrompt = optimized;
-            console.log("✅ פרומפט אופטימיזד נשמר לצפייה");
+            console.log("✅ פרומפט אופטימיזד נשמר - יתווסף אוטומטית בשליחה הבאה");
+            
+            // התערבות בשליחת הודעות
+            interceptSendMessage();
           } else {
             throw new Error("לא התקבלה תשובה תקינה מה-API");
           }
@@ -355,7 +482,7 @@
             const eyeBtn = document.createElement("button");
             eyeBtn.id = "gpt-eye-btn";
             eyeBtn.innerText = "👁️";
-            eyeBtn.title = "הצג את הפרומפט המאופטמיזה (לא מחליף את הטקסט)";
+            eyeBtn.title = "הצג את הפרומפט המאופטמיזה";
             eyeBtn.style.cssText = `
               position: fixed;
               bottom: 20px;
@@ -391,6 +518,37 @@
             };
             
             document.body.appendChild(eyeBtn);
+
+            // הוספת אינדיקטור חזותי שיש פרומפט מאופטמיזה
+            const indicator = document.createElement("div");
+            indicator.id = "gpt-optimize-indicator";
+            indicator.innerText = "🔧 Optimized prompt ready";
+            indicator.style.cssText = `
+              position: fixed;
+              top: 20px;
+              right: 20px;
+              z-index: 9999;
+              padding: 8px 16px;
+              background: #28a745;
+              color: white;
+              border-radius: 6px;
+              font-size: 12px;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+              animation: pulse 2s infinite;
+            `;
+            
+            // הוספת אנימציה
+            const style = document.createElement('style');
+            style.textContent = `
+              @keyframes pulse {
+                0% { opacity: 1; }
+                50% { opacity: 0.7; }
+                100% { opacity: 1; }
+              }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(indicator);
           }
         }
       };
