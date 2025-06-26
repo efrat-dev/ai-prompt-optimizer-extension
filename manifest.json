@@ -19,7 +19,7 @@
         "https://chat.openai.com/*",
         "https://claude.ai/*"
       ],
-      "js": ["content.js"],
+      "js": ["js/content.js"],
       "css": ["css/modal-styles.css", "css/notifications.css"],
       "run_at": "document_idle",
       "type": "module"
@@ -28,17 +28,17 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "dom-manager.js",
-        "api-service.js",
-        "optimize-button.js",
-        "button-styles.js",
-        "notification-manager.js",
+        "js/dom-manager.js",
+        "js/api-service.js",
+        "js/optimize-button.js",
+        "js/button-styles.js",
+        "js/notification-manager.js",
+        "js/api-providers.js",
+        "js/modal-manager.js",
         "css/notifications.css",
         "css/modal-styles.css",
         "prompt.md",
-        "templates/modal-template.html",
-        "api-providers.js",
-        "modal-manager.js"
+        "templates/modal-template.html"
       ],
       "matches": ["<all_urls>"]
     }
