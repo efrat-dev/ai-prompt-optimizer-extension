@@ -13,18 +13,19 @@
   const tryAddButton = () => {
     attempts++;
     if (optimizeButton.addButton()) {
-      console.log("🎉 התוסף הופעל בהצלחה!");
       return;
     }
     if (attempts < maxAttempts) {
-      setTimeout(tryAddButton, 2000);
+      setTimeout(tryAddButton, 2000); // Retry every 2 seconds
     } else {
-      console.error("❌ נכשל בהוספת הכפתור אחרי כל הניסיונות");
+      console.error("❌ Failed to add button after all attempts");
     }
   };
 
+  // Initial delay to ensure page is loaded
   setTimeout(tryAddButton, 1000);
 
+  // Watch for DOM changes and re-add button if removed
   const observer = new MutationObserver(() => {
     if (!document.querySelector('#gpt-optimize-btn')) {
       setTimeout(tryAddButton, 1000);

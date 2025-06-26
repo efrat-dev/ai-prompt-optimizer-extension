@@ -1,6 +1,6 @@
 export class APIService {
     constructor() {
-      this.temporaryApiKey = null; // לשמירה זמנית של מפתח מהמודאל
+      this.temporaryApiKey = null; // Temporary storage for API key from modal
     }
   
     async getStorageData() {
@@ -17,7 +17,7 @@ export class APIService {
   
     async setApiKey(apiKey) {
       this.temporaryApiKey = apiKey;
-      // אופציונלי: לשמור גם ב-storage
+      // Optional: also save to storage for persistence
       return new Promise((resolve) => {
         chrome.storage.local.set({ openai_key: apiKey }, resolve);
       });
@@ -29,11 +29,11 @@ export class APIService {
       } else if (apiKey.startsWith('sk-')) {
         return 'openai';
       } else {
-        // ניחוש לפי אורך ופורמט
+        // Fallback detection by length and format
         if (apiKey.length > 100 && apiKey.includes('-')) {
           return 'anthropic';
         }
-        return 'openai'; // ברירת מחדל
+        return 'openai'; // Default to OpenAI
       }
     }
   
@@ -43,7 +43,7 @@ export class APIService {
         return await response.text();
       } catch (error) {
         console.warn("Failed to load prompt.md, using fallback");
-        return "אתה עוזר מקצועי לשיפור פרומפטים. שפר את הפרומפט הבא כך שיהיה יותר ברור, מדויק ויעיל:";
+        return "You are a professional assistant for improving prompts. Improve the following prompt to be clearer, more precise and effective:";
       }
     }
   
@@ -83,7 +83,7 @@ export class APIService {
           "anthropic-version": "2023-06-01"
         },
         body: JSON.stringify({
-          model: "claude-3-haiku-20240307", // מודל זול ומהיר
+          model: "claude-3-haiku-20240307", // Fast and cost-effective model
           max_tokens: 1000,
           temperature: 0.1,
           system: systemPrompt,
@@ -115,14 +115,14 @@ export class APIService {
         throw new Error("API_KEY_MISSING");
       }
   
-      // בחירת הפרומפט - מותאם אישית או ברירת מחדל
+      // Choose prompt: custom or default
       const systemPrompt = storageData.useCustom && storageData.customPrompt 
         ? storageData.customPrompt 
         : defaultPrompt;
   
-      // זיהוי ספק ה-API
+      // Auto-detect API provider
       const provider = this.detectApiProvider(storageData.key);
-      console.log(`🔍 זוהה ספק API: ${provider}`);
+      console.log(`🔍 Detected API provider: ${provider}`);
   
       let optimized;
       
@@ -133,8 +133,8 @@ export class APIService {
           optimized = await this.optimizePromptWithOpenAI(storageData.key, systemPrompt, input);
         }
       } catch (error) {
-        // אם נכשל עם ספק אחד, ננסה את השני
-        console.warn(`❌ נכשל עם ${provider}, מנסה ספק אחר...`);
+        // Fallback: try the other provider if first one fails
+        console.warn(`❌ Failed with ${provider}, attempting other provider...`);
         
         if (provider === 'anthropic') {
           optimized = await this.optimizePromptWithOpenAI(storageData.key, systemPrompt, input);
@@ -144,13 +144,13 @@ export class APIService {
       }
   
       if (!optimized || !optimized.trim()) {
-        throw new Error("לא התקבלה תשובה תקינה מה-API");
+        throw new Error("No valid response received from API");
       }
   
       return optimized.trim();
     }
   
-    // פונקציה עזר לבדיקת תקינות המפתח
+    // Helper function to validate API key
     async validateApiKey(apiKey) {
       const provider = this.detectApiProvider(apiKey);
       
