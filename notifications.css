@@ -1,0 +1,120 @@
+/* Base notification styles */
+.gpt-optimize-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: slideInBounce 0.5s ease-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Success notification */
+  .gpt-optimize-notification--success {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  }
+  
+  /* Error notification */
+  .gpt-optimize-notification--error {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+  }
+  
+  /* Warning notification */
+  .gpt-optimize-notification--warning {
+    background: linear-gradient(135deg, #ffc107, #e0a800);
+    color: #212529;
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+  }
+  
+  /* Info notification */
+  .gpt-optimize-notification--info {
+    background: linear-gradient(135deg, #17a2b8, #138496);
+    color: white;
+    box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+  }
+  
+  /* Hover effects */
+  .gpt-optimize-notification:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .gpt-optimize-notification--success:hover {
+    box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
+  }
+  
+  .gpt-optimize-notification--error:hover {
+    box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
+  }
+  
+  .gpt-optimize-notification--warning:hover {
+    box-shadow: 0 6px 16px rgba(255, 193, 7, 0.4);
+  }
+  
+  .gpt-optimize-notification--info:hover {
+    box-shadow: 0 6px 16px rgba(23, 162, 184, 0.4);
+  }
+  
+  /* Animations */
+  @keyframes slideInBounce {
+    0% { 
+      transform: translateX(100%) scale(0.8); 
+      opacity: 0; 
+    }
+    60% { 
+      transform: translateX(-10px) scale(1.05); 
+      opacity: 0.9; 
+    }
+    100% { 
+      transform: translateX(0) scale(1); 
+      opacity: 1; 
+    }
+  }
+  
+  @keyframes slideOut {
+    0% { 
+      transform: translateX(0) scale(1); 
+      opacity: 1; 
+    }
+    100% { 
+      transform: translateX(100%) scale(0.8); 
+      opacity: 0; 
+    }
+  }
+  
+  /* Close animation class */
+  .gpt-optimize-notification--closing {
+    animation: slideOut 0.3s ease-in forwards !important;
+  }
+  
+  /* Multiple notifications stacking */
+  .gpt-optimize-notification:nth-child(n+2) {
+    top: calc(20px + (60px * var(--notification-index, 0)));
+  }
+  
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .gpt-optimize-notification--warning {
+      color: #000;
+    }
+  }
+  
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .gpt-optimize-notification {
+      right: 10px;
+      left: 10px;
+      width: auto;
+      font-size: 13px;
+      padding: 10px 16px;
+    }
+  }

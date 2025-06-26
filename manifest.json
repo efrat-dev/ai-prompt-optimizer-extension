@@ -20,9 +20,7 @@
         "https://claude.ai/*"
       ],
       "js": ["content.js"],
-      "css": [
-        "modal-styles.css"
-      ],
+      "css": ["modal-styles.css", "notifications.css"],
       "run_at": "document_idle",
       "type": "module"
     }
@@ -34,8 +32,11 @@
         "api-service.js",
         "optimize-button.js",
         "button-styles.js",
+        "notification-manager.js",
+        "notifications.css",
         "prompt.md",
-        "templates/modal-template.html"
+        "templates/modal-template.html",
+        "modal-styles.css"
       ],
       "matches": ["<all_urls>"]
     }
