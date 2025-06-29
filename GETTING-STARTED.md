@@ -1,6 +1,6 @@
 # 🚀 Getting Started with AI Prompt Optimizer
 
-**← [Back to Main README](README.md)** | **[Advanced Guide →](ADVANCED.md)**
+**← [Back to Main README](README.md)** | **[Technical Architecture](ARCHITECTURE.md)** | **[Advanced Guide →](ADVANCED.md)**
 
 This guide will help you install and start using the AI Prompt Optimizer Chrome extension in just a few minutes.
 
@@ -61,7 +61,7 @@ Navigate to any of these AI chat interfaces:
 ### Step 2: Look for the Optimize Button
 A floating ⚙️ "Optimize" button will appear in the bottom-right corner of the page.
 
-![Optimize Button Location](screenshots/optimize-button-location.png)
+![Optimize Button](screenshots/optimize-button.png)
 
 ### Step 3: Enter Your First Prompt
 Type any question or prompt in the chat interface's text box. For example:
@@ -187,7 +187,8 @@ If you're still having issues:
 Now that you're set up, explore these advanced features:
 
 - **[Custom Prompt Templates](ADVANCED.md#custom-prompt-engineering)** - Create your own optimization styles
-- **[Multiple API Keys](ADVANCED.md#multiple-api-keys)** - Switch between different providers  
+- **[Multiple API Keys](ADVANCED.md#multiple-api-keys)** - Switch between different providers
+- **[Technical Architecture](ARCHITECTURE.md)** - Understanding the system design
 - **[Development Guide](ADVANCED.md#development--customization)** - Customize the extension
 - **[Contributing](ADVANCED.md#contributing)** - Help improve the extension
 
@@ -195,4 +196,4 @@ Now that you're set up, explore these advanced features:
 
 **🎉 You're ready to optimize your AI prompts!**
 
-**← [Back to Main README](README.md)** | **[Advanced Guide →](ADVANCED.md)**
+**← [Back to Main README](README.md)** | **[Technical Architecture](ARCHITECTURE.md)** | **[Advanced Guide →](ADVANCED.md)**
