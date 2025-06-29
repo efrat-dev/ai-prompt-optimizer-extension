@@ -13,7 +13,7 @@ This guide will help you install and start using the AI Prompt Optimizer Chrome 
 
 1. **Download the Extension**
    ```bash
-   git clone https://github.com/your-username/ai-prompt-optimizer-extension.git
+   git clone https://github.com/efrat-dev/ai-prompt-optimizer-extension.git
    cd ai-prompt-optimizer-extension
    ```
    
@@ -23,12 +23,14 @@ This guide will help you install and start using the AI Prompt Optimizer Chrome 
    - Navigate to `chrome://extensions/`
    - Enable "Developer mode" (toggle in top-right corner)
 
+![Installation Step 1](screenshots/installation-step1.png)
+
 3. **Load Extension**
    - Click "Load unpacked"
    - Select the extension directory
    - The extension should now appear in your extensions list
 
-![Installation Steps](screenshots/installation-steps.png)
+![Installation Step 2](screenshots/installation-step2.png)
 
 ## 🔑 Getting Your API Key
 
@@ -73,7 +75,7 @@ How do I center a div in CSS?
 3. Enter your API key and click "Save"
 4. The extension will optimize your prompt automatically
 
-![API Key Modal](screenshots/api-key-modal-example.png)
+![API Key Modal](screenshots/api-key-modal.png)
 
 ### Step 5: See the Results
 Your original prompt will be transformed into a professional system prompt:
@@ -95,7 +97,16 @@ How do I center a div in CSS?
 How do I center a div in CSS?
 ```
 
-![Before After Comparison](screenshots/before-after-example.png)
+*Comparison showing prompt transformation*
+
+**Before**
+
+![Before](screenshots/before.png)
+
+
+**After**
+
+![After](screenshots/after.png)
 
 ## 🎨 Example Optimizations
 
@@ -113,14 +124,6 @@ How do I center a div in CSS?
 1. Right-click the extension icon in your browser
 2. Select "Options"
 3. Or go to `chrome://extensions/` → Find the extension → Click "Details" → "Extension options"
-
-### Available Settings
-- **Custom System Prompts**: Modify the optimization template
-- **API Provider Preference**: Choose default provider (OpenAI/Anthropic)
-- **Button Position**: Adjust optimize button location
-- **Notification Style**: Customize feedback messages
-
-![Settings Page](screenshots/settings-page.png)
 
 ## 💡 Usage Tips
 
@@ -178,11 +181,6 @@ If you're still having issues:
 1. **Check the Console**: Press F12 and look for error messages
 2. **Try Different Websites**: Test on ChatGPT, Claude, etc.
 3. **Disable Other Extensions**: Temporarily disable other extensions
-4. **Report Issues**: [Create a GitHub issue](https://github.com/your-username/ai-prompt-optimizer-extension/issues) with:
-   - Browser version
-   - Extension version  
-   - Error messages
-   - Steps to reproduce
 
 ## 🚀 What's Next?
 
