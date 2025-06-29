@@ -1,363 +1,353 @@
 # 🏗️ System Architecture
 
-> **Note**: This document provides the high-level architectural overview. For implementation details, see [Advanced Guide](ADVANCED.md) and [Getting Started](GETTING-STARTED.md).
+> **Clean, focused architecture for AI prompt optimization across multiple chat platforms**
 
 ## Overview
-The AI Prompt Optimizer Chrome Extension follows a modular, event-driven architecture designed for scalability, maintainability, and cross-platform compatibility across multiple AI chat websites.
+The AI Prompt Optimizer Chrome Extension implements a lightweight, modular architecture designed for reliable prompt enhancement across ChatGPT, Claude, and other AI chat platforms. The system prioritizes simplicity, performance, and maintainability.
 
 ## Architecture Diagram
 
 ```mermaid
 graph TB
-    subgraph "Browser Environment"
-        subgraph "Extension Core"
-            M[Manifest v3] --> CS[Content Scripts]
-            M --> BG[Background Service Worker]
-            M --> P[Popup Interface]
-        end
-        
-        subgraph "Content Layer"
-            CS --> DM[DOM Manager]
-            CS --> OB[Optimize Button]
-            CS --> MM[Modal Manager]
-            CS --> NM[Notification Manager]
-        end
-        
-        subgraph "Service Layer"
-            AS[API Service] --> AP[API Providers]
-            AS --> CM[Cache Manager]
-            AS --> EM[Error Manager]
-        end
-        
-        subgraph "Data Layer"
-            SS[Session Storage]
-            LS[Local Storage]
-            CM --> SS
-            CM --> LS
-        end
+    subgraph "Chrome Extension"
+        M[Manifest v3] --> CS[Content Script]
+        M --> P[Popup Interface]
+        M --> SET[Settings Page]
     end
     
-    subgraph "External APIs"
-        OPENAI[OpenAI API]
-        ANTHROPIC[Anthropic API]
-        FUTURE[Future APIs]
+    subgraph "Core Components"
+        CS --> DM[DOM Manager]
+        CS --> OB[Optimize Button]
+        CS --> AS[API Service]
+        OB --> MM[Modal Manager]
+        DM --> NM[Notification Manager]
+        AS --> AP[API Providers]
     end
     
-    subgraph "Target Websites"
-        CHATGPT[ChatGPT]
-        CLAUDE[Claude.ai]
-        OTHER[Other AI Sites]
+    subgraph "External Services"
+        AP --> OPENAI[OpenAI API]
+        AP --> ANTHROPIC[Anthropic API]
     end
     
-    DM --> CHATGPT
-    DM --> CLAUDE
-    DM --> OTHER
-    
-    AP --> OPENAI
-    AP --> ANTHROPIC
-    AP --> FUTURE
+    subgraph "Target Platforms"
+        DM --> CHATGPT[ChatGPT]
+        DM --> CLAUDE[Claude.ai]
+    end
 ```
 
-## Core Design Patterns
+## Core Components
 
-### 1. **Provider Pattern** 
-*Enables pluggable API integrations*
-
-The extension uses a provider pattern to support multiple AI APIs seamlessly:
+### 1. **Content Script** (`content.js`)
+The main entry point that initializes the extension on AI chat websites:
 
 ```javascript
-class APIProviders {
-  constructor() {
-    this.providers = new Map([
-      ['openai', new OpenAIProvider],
-      ['anthropic', new AnthropicProvider]
-    ]);
-  }
-}
+const domManager = new DOMManager();
+const apiService = new APIService();
+const optimizeButton = new OptimizeButton(domManager, apiService);
 ```
 
-> **Implementation**: See [API Providers section](ADVANCED.md#adding-new-api-providers) in Advanced Guide
+**Key Features:**
+- Loads on target websites only
+- Implements retry logic for button placement
+- Monitors DOM changes for dynamic content
+- Handles component lifecycle management
 
-### 2. **Adapter Pattern**
-*Handles different website structures*
-
-Each AI chat website has unique DOM structures. The adapter pattern normalizes these differences:
-
-```javascript
-class WebsiteAdapter {
-  static create(domain) {
-    const adapters = {
-      'chatgpt.com': ChatGPTAdapter,
-      'claude.ai': ClaudeAdapter
-    };
-    return new (adapters[domain] || DefaultAdapter)();
-  }
-}
-```
-
-> **Adding new sites**: See [Adding New Websites](ADVANCED.md#adding-new-websites) guide
-
-### 3. **Plugin System**
-*Extensible architecture for future features*
+### 2. **DOM Manager** (`dom-manager.js`)
+Handles all DOM interactions and UI feedback:
 
 ```javascript
-class PluginManager {
-  constructor() {
-    this.plugins = new Map();
-  }
-  
-  async execute(hook, data) {
-    for (const plugin of this.plugins.values()) {
-      if (plugin[hook]) await plugin[hook](data);
+class DOMManager {
+  findTextareaAndContainer() {
+    // Multi-selector approach for different platforms
+    for (const selector of this.textareaSelectors) {
+      // Platform-agnostic textarea detection
     }
   }
 }
 ```
 
-## Data Flow Architecture
+**Responsibilities:**
+- Cross-platform textarea detection
+- Content manipulation (get/set)
+- Notification management
+- Event handling
+
+### 3. **API Service** (`api-service.js`)
+Manages API communications and provider selection:
+
+```javascript
+class APIService {
+  detectApiProvider(apiKey) {
+    return apiKey.startsWith('sk-ant-') ? 'anthropic' : 'openai';
+  }
+  
+  async optimizePrompt(input) {
+    // Auto-detection with fallback logic
+  }
+}
+```
+
+**Features:**
+- Automatic API provider detection
+- Fallback mechanism between providers
+- Secure key management
+- Error handling with retry logic
+
+### 4. **Optimize Button** (`optimize-button.js`)
+The main user interface component:
+
+```javascript
+class OptimizeButton {
+  async handleOptimizeClick(button) {
+    // Loading state management
+    // API key validation
+    // Content optimization
+    // UI feedback
+  }
+}
+```
+
+**Capabilities:**
+- Fixed positioning with responsive design
+- Loading states and visual feedback
+- Error handling with modal integration
+- Content concatenation (optimized + original)
+
+### 5. **Modal Manager** (`modal-manager.js`)
+Handles API key input when needed:
+
+```javascript
+class ModalManager {
+  async showApiKeyModal() {
+    // Dynamic HTML template loading
+    // Event listener setup
+    // Promise-based user interaction
+  }
+}
+```
+
+**Features:**
+- Template-based modal rendering
+- Keyboard navigation support
+- Input validation
+- Accessible design
+
+### 6. **Notification Manager** (`notification-manager.js`)
+Provides user feedback across the application:
+
+```javascript
+class NotificationManager {
+  showNotification(message, type = 'success', duration = 3000) {
+    // CSS injection
+    // Stacked notifications
+    // Auto-dismiss functionality
+  }
+}
+```
+
+**Notification Types:**
+- Success (green) - Operation completed
+- Error (red) - API or validation errors
+- Warning (yellow) - Missing configuration
+- Info (blue) - General information
+
+## Data Flow
 
 ### User Interaction Flow
 ```mermaid
 sequenceDiagram
-    participant U as User
-    participant B as Button
-    participant DM as DOM Manager
-    participant AS as API Service
-    participant AP as API Provider
-    participant UI as UI Manager
+    participant User
+    participant Button
+    participant DOM
+    participant API
+    participant Provider
     
-    U->>B: Click Optimize
-    B->>DM: Get textarea content
-    DM->>B: Return content
-    B->>AS: Request optimization
-    AS->>AP: Call API
-    AP->>AS: Return result
-    AS->>B: Optimized prompt
-    B->>DM: Update textarea
-    B->>UI: Show success notification
+    User->>Button: Click Optimize
+    Button->>DOM: Get textarea content
+    DOM-->>Button: Return text
+    Button->>API: Request optimization
+    API->>Provider: Call LLM API
+    Provider-->>API: Return optimized text
+    API-->>Button: Processed result
+    Button->>DOM: Update textarea
+    Button->>DOM: Show notification
 ```
 
 ### Error Handling Flow
 ```mermaid
 flowchart TD
-    A[API Request] --> B{Success?}
-    B -->|Yes| C[Cache Result]
-    B -->|No| D[Error Handler]
-    D --> E{Retry?}
-    E -->|Yes| F[Exponential Backoff]
-    E -->|No| G[Fallback Provider]
-    F --> A
-    G --> H{Available?}
-    H -->|Yes| A
-    H -->|No| I[Show Error]
-    C --> J[Update UI]
-    I --> K[Graceful Degradation]
+    A[API Request] --> B{Has API Key?}
+    B -->|No| C[Show Modal]
+    B -->|Yes| D[Detect Provider]
+    C --> E[Save Key] --> D
+    D --> F[Call Primary API]
+    F --> G{Success?}
+    G -->|Yes| H[Update Content]
+    G -->|No| I[Try Fallback API]
+    I --> J{Success?}
+    J -->|Yes| H
+    J -->|No| K[Show Error]
 ```
 
-> **Error handling details**: See [Troubleshooting](ADVANCED.md#troubleshooting) section
+## Key Design Patterns
 
-## Performance Architecture
-
-### Caching Strategy
-The extension implements a multi-level caching system:
+### 1. **Provider Pattern**
+Enables support for multiple AI APIs:
 
 ```javascript
-class CacheManager {
-  constructor() {
-    this.promptCache = new LRUCache(100);      // Recent prompts
-    this.responseCache = new TTLCache(3600);   // API responses (1 hour)
+class APIProviders {
+  static async optimizePromptWithOpenAI(apiKey, systemPrompt, input) {
+    // OpenAI-specific implementation
+  }
+  
+  static async optimizePromptWithAnthropic(apiKey, systemPrompt, input) {
+    // Anthropic-specific implementation
   }
 }
 ```
 
-### Memory Management
-Automatic cleanup prevents memory leaks:
+### 2. **Adapter Pattern**
+Handles different website structures:
 
 ```javascript
-class MemoryManager {
-  static cleanup() {
-    this.promptCache?.clear();
-    this.eventListeners?.forEach(listener => {
-      document.removeEventListener(listener.event, listener.handler);
-    });
-    this.controller?.abort();
-  }
+this.textareaSelectors = [
+  'textarea[data-id="root"]',           // ChatGPT
+  'textarea[placeholder*="Message"]',    // Generic
+  'div[contenteditable="true"]',        // Rich text editors
+  'textarea'                            // Fallback
+];
+```
+
+### 3. **Template Pattern**
+Modal rendering with external HTML:
+
+```javascript
+const templateUrl = chrome.runtime.getURL('templates/modal-template.html');
+const response = await fetch(templateUrl);
+const htmlContent = await response.text();
+```
+
+## Security Implementation
+
+### Input Sanitization
+```javascript
+// Automatic content length limiting
+const input = this.domManager.getTextareaContent(textarea);
+if (!input.trim()) {
+  alert("Please enter text to optimize");
+  return;
 }
 ```
 
-> **Performance optimization**: See [Performance Optimization](ADVANCED.md#performance-optimization) section
+### Secure Storage
+- API keys stored in Chrome's local storage
+- No persistent sensitive data
+- Session-based key management
 
-## Security Architecture
-
-### Multi-layered Security Approach
-
-1. **Input Sanitization**
-   ```javascript
-   class InputSanitizer {
-     static sanitize(input) {
-       return input
-         .replace(/<script[^>]*>.*?<\/script>/gi, '')
-         .replace(/javascript:/gi, '')
-         .trim()
-         .substring(0, 10000);
-     }
-   }
-   ```
-
-2. **Secure Storage**
-   - API keys encrypted in session storage
-   - No persistent storage of sensitive data
-   - CSP headers prevent XSS attacks
-
-3. **Minimal Permissions**
-   - Only requests necessary browser permissions
-   - Scoped to specific websites
-
-> **Security details**: See [Security Considerations](ADVANCED.md#security-considerations)
-
-## Testing Architecture
-
-### Testing Pyramid
-```
-tests/
-├── unit/                    # Fast, isolated tests
-│   ├── api-service.test.js
-│   ├── dom-manager.test.js
-│   └── cache-manager.test.js
-├── integration/             # Component interaction tests
-│   ├── website-integration.test.js
-│   └── api-integration.test.js
-└── e2e/                     # Full user journey tests
-    ├── user-flow.test.js
-    └── cross-browser.test.js
-```
-
-### Mock Strategy
-```javascript
-class MockFactory {
-  static createAPIResponse(provider, success = true) {
-    const responses = {
-      openai: { choices: [{ message: { content: 'optimized' } }] },
-      anthropic: { content: [{ text: 'optimized' }] }
-    };
-    return success ? responses[provider] : new Error('API Error');
-  }
+### Minimal Permissions
+```json
+{
+  "permissions": ["storage", "scripting", "activeTab"],
+  "host_permissions": [
+    "https://chat.openai.com/*",
+    "https://api.openai.com/*"
+  ]
 }
 ```
 
-> **Testing guide**: See [Testing](ADVANCED.md#testing) section
+## Performance Optimizations
 
-## Monitoring & Observability
-
-### Error Tracking
+### Lazy Loading
 ```javascript
-class ErrorTracker {
-  static track(error, context) {
-    const errorData = {
-      message: error.message,
-      stack: error.stack,
-      context,
-      timestamp: Date.now(),
-      version: chrome.runtime.getManifest().version
-    };
-    
-    console.error('[AI Optimizer Error]', errorData);
+// Dynamic imports for better performance
+const { DOMManager } = await import('./dom-manager.js');
+const { OptimizeButton } = await import('./optimize-button.js');
+```
+
+### Efficient DOM Monitoring
+```javascript
+const observer = new MutationObserver(() => {
+  if (!document.querySelector('#gpt-optimize-btn')) {
+    setTimeout(tryAddButton, 1000);
   }
+});
+```
+
+### CSS Injection Optimization
+```javascript
+injectCSS() {
+  if (this.cssInjected) return;
+  // One-time CSS injection
+  this.cssInjected = true;
 }
 ```
 
-### Performance Monitoring
-```javascript
-class PerformanceTracker {
-  static measure(operation, fn) {
-    const start = performance.now();
-    const result = fn();
-    const duration = performance.now() - start;
-    console.log(`[Performance] ${operation}: ${duration}ms`);
-    return result;
-  }
-}
+## File Structure
+
+```
+├── manifest.json              # Extension configuration
+├── popup.html                 # Extension popup interface
+├── settings.html              # Settings page
+├── templates/
+│   └── modal-template.html    # API key modal template
+├── css/
+│   ├── modal-styles.css       # Modal styling
+│   └── notifications.css      # Notification styling
+├── js/
+│   ├── content.js            # Main content script
+│   ├── dom-manager.js        # DOM manipulation
+│   ├── api-service.js        # API communication
+│   ├── optimize-button.js    # Main UI component
+│   ├── modal-manager.js      # Modal handling
+│   ├── notification-manager.js # User feedback
+│   ├── api-providers.js      # LLM integrations
+│   ├── button-styles.js      # Button styling utilities
+│   └── settings.js           # Settings page logic
+└── prompt.md                 # Default system prompt
 ```
 
-> **Monitoring setup**: See [Analytics & Monitoring](ADVANCED.md#analytics--monitoring)
+## Deployment Configuration
 
-## Deployment Architecture
-
-### Build Pipeline
-- **Development**: Hot reload, debug mode, verbose logging
-- **Production**: Minified, optimized, error reporting
-
-### Environment Configuration
+### Development
 ```javascript
-const config = {
-  development: {
-    apiTimeout: 60000,
-    debug: true,
-    cache: false
-  },
-  production: {
-    apiTimeout: 30000,
-    debug: false,
-    cache: true
-  }
-};
+// Debug mode enabled
+console.log("✅ Optimized prompt added");
 ```
 
-> **Deployment guide**: See [Deployment](ADVANCED.md#deployment) section
-
-## Future Architecture Considerations
-
-### Planned Enhancements
-1. **Multi-Browser Support**
-   - Firefox WebExtensions API
-   - Safari App Extensions
-   - Edge Extensions
-
-2. **Cloud Integration**
-   - User account sync
-   - Cloud-based optimization
-   - Cross-device prompt history
-
-3. **Advanced Features**
-   - Custom prompt templates
-   - Team collaboration features
-   - Analytics dashboard
+### Production
+```javascript
+// Minimal logging
+// Error tracking
+// Performance monitoring
+```
 
 ## Architecture Benefits
 
-### ✅ **Modularity**
-- Single responsibility principle
-- Easy to test individual components
-- Pluggable architecture for extensions
-
-### ✅ **Scalability** 
-- Provider pattern enables easy API additions
-- Adapter pattern supports new websites
-- Cache architecture handles growing usage
+### ✅ **Simplicity**
+- Clear separation of concerns
+- Minimal dependencies
+- Easy to understand and maintain
 
 ### ✅ **Reliability**
-- Comprehensive error handling with fallbacks
-- Graceful degradation when services fail
-- Automatic retry mechanisms
+- Robust error handling
+- Fallback mechanisms
+- Cross-platform compatibility
 
 ### ✅ **Performance**
-- Lazy loading reduces initial load time
-- Multi-level caching minimizes API calls
-- Debounced operations prevent spam requests
+- Lazy loading components
+- Efficient DOM operations
+- Minimal memory footprint
 
 ### ✅ **Security**
-- Input sanitization prevents injection attacks
-- Secure storage for sensitive data
-- Minimal permissions model
+- Input validation
+- Secure API key handling
+- Minimal permissions
 
-## Quick Links
-
-- **🚀 [Getting Started](GETTING-STARTED.md)** - Installation and first use
-- **🔧 [Advanced Guide](ADVANCED.md)** - Detailed implementation and customization
-- **📊 [API Reference](ADVANCED.md#api-reference)** - Complete API documentation
-- **🧪 [Testing Guide](ADVANCED.md#testing)** - How to test the extension
-- **🚀 [Deployment](ADVANCED.md#deployment)** - Build and release process
+### ✅ **Extensibility**
+- Provider pattern for new APIs
+- Template system for UI components
+- Modular component architecture
 
 ---
 
-*This architecture provides a solid foundation for the AI Prompt Optimizer extension while maintaining flexibility for future enhancements and scaling.*
+*This architecture provides a solid foundation for AI prompt optimization while maintaining simplicity and reliability.*
