@@ -1,6 +1,6 @@
 # 🔧 Advanced Usage & Development Guide
 
-**← [Getting Started](GETTING-STARTED.md)** | **[Technical Architecture](ARCHITECTURE.md)** | **[Main README](README.md)**
+**← [Getting Started](GETTING-STARTED.md)** | **[Technical Architecture](ARCHITECTURE.md)** | **[Main README](docs/README.md)**
 
 This guide covers advanced usage, customization, development, and troubleshooting for the AI Prompt Optimizer Chrome extension.
 
@@ -85,28 +85,33 @@ Look for messages prefixed with:
 ```
 ai-prompt-optimizer-extension/
 ├── manifest.json              # Extension configuration
-├── README.md                 # Main documentation
-├── GETTING-STARTED.md        # Installation guide
-├── ADVANCED.md               # This file
-├── prompt.md                 # System prompt template
+├── README.md                  # Main documentation
+├── prompt.md                  # System prompt template
+├── docs/
+│   ├── GETTING-STARTED.md     # Installation guide
+│   ├── ADVANCED.md            # Advanced usage guide
+│   ├── ARCHITECTURE.md        # System design overview
+│   └── screenshots/           # Documentation images
+│       ├── openai-integration.png
+│       ├── optimize-button.png
+│       └── ...
 ├── js/
-│   ├── content.js           # Content script entry point
-│   ├── api-service.js       # API communication
-│   ├── dom-manager.js       # DOM manipulation
-│   ├── optimize-button.js   # Button functionality
-│   ├── modal-manager.js     # Modal dialogs
-│   ├── notification-manager.js # User notifications
-│   ├── api-providers.js     # API provider implementations
-│   ├── button-styles.js     # Button styling
-│   └── settings.js          # Settings page logic
+│   ├── content.js             # Content script entry point
+│   ├── api-service.js         # API communication
+│   ├── dom-manager.js         # DOM manipulation
+│   ├── optimize-button.js     # Button functionality
+│   ├── modal-manager.js       # Modal dialogs
+│   ├── notification-manager.js# User notifications
+│   ├── api-providers.js       # API provider implementations
+│   ├── button-styles.js       # Button styling
+│   └── settings.js            # Settings page logic
 ├── css/
-│   ├── modal-styles.css     # Modal dialog styles
-│   └── notifications.css    # Notification styles
+│   ├── modal-styles.css       # Modal dialog styles
+│   └── notifications.css      # Notification styles
 ├── templates/
-│   └── modal-template.html  # API key modal template
-├── screenshots/             # Documentation images
+│   └── modal-template.html    # API key modal template
 └── assets/
-    ├── icon-16.png         # Extension icons
+    ├── icon-16.png            # Extension icons
     ├── icon-48.png
     └── icon-128.png
 ```
@@ -483,4 +488,4 @@ const config = {
 
 **🔧 Happy Developing!**
 
-**← [Getting Started](GETTING-STARTED.md)** | **[Technical Architecture](ARCHITECTURE.md)** | **[Main README](README.md)**
+**← [Getting Started](GETTING-STARTED.md)** | **[Technical Architecture](ARCHITECTURE.md)** | **[Main README](../README.md)**

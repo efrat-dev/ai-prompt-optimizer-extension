@@ -1,6 +1,6 @@
 # 🚀 AI Prompt Optimizer Chrome Extension
 
-[![Version](https://img.shields.io/badge/version-1.0-blue.svg)](https://github.com/your-username/ai-prompt-optimizer-extension)
+[![Version](https://img.shields.io/badge/version-1.0-blue.svg)](https://github.com/efrat-dev/ai-prompt-optimizer-extension)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome-Web%20Store-yellow.svg)](#)
 
@@ -8,9 +8,9 @@ Transform your casual AI prompts into professional, domain-specific system promp
 
 ## 📖 Documentation
 
-- **[Installation & Quick Start](GETTING-STARTED.md)** - Setup guide and basic usage
-- **[Advanced Usage & Development](ADVANCED.md)** - Customization, development, and troubleshooting
-- **[Technical Architecture](ARCHITECTURE.md)** - Understanding the system design
+- **[Installation & Quick Start](docs/GETTING-STARTED.md)** - Setup guide and basic usage
+- **[Advanced Usage & Development](docs/ADVANCED.md)** - Customization, development, and troubleshooting
+- **[Technical Architecture](docs/ARCHITECTURE.md)** - Understanding the system design
 
 ## 🎯 What It Does
 
@@ -38,7 +38,7 @@ Explain recursion
 ### Extension in Action
 *The floating optimize button appears on supported AI chat websites*
 
-![Optimize Button](screenshots/optimize-button.png)
+![Optimize Button](docs/screenshots/optimize-button.png)
 
 
 *Secure API key entry modal*
@@ -49,19 +49,19 @@ Explain recursion
 
 **Before**
 
-![Before](screenshots/before.png)
+![Before](docs/screenshots/before.png)
 
 
 **After**
 
-![After](screenshots/after.png)
+![After](docs/screenshots/after.png)
 
 ### Supported Websites
 | Website | Status | Screenshot |
 |---------|--------|------------|
-| ChatGPT | ✅ Supported | ![ChatGPT](screenshots/chatgpt-integration.png) |
-| OpenAI Chat (without registration) | ✅ Supported | ![OpenAI](screenshots/openai-integration.png) |
-| Claude | ✅ Supported | ![Claude](screenshots/claude-integration.png) |
+| ChatGPT | ✅ Supported | ![ChatGPT](docs/screenshots/chatgpt-integration.png) |
+| OpenAI Chat (without registration) | ✅ Supported | ![OpenAI](docs/screenshots/openai-integration.png) |
+| Claude | ✅ Supported | ![Claude](docs/screenshots/claude-integration.png) |
 
 ## ✨ Key Features
 
@@ -85,7 +85,7 @@ Explain recursion
 3. Enable "Developer mode"
 4. Click "Load unpacked" and select the extension folder
 
-**👉 [Complete Installation Guide](GETTING-STARTED.md)**
+**👉 [Complete Installation Guide](docs/GETTING-STARTED.md)**
 
 ## 🎯 Supported Websites
 
@@ -107,23 +107,22 @@ Explain recursion
 
 ## 🛠️ For Developers
 
-### Project Structure
+### Project Structure 
+
 ```
 ai-prompt-optimizer-extension/
 ├── manifest.json              # Extension configuration
-├── README.md                 # This file
-├── GETTING-STARTED.md        # Installation & usage guide
-├── ADVANCED.md               # Development & customization
-├── prompt.md                 # System prompt template
-├── js/                       # Core JavaScript files
-├── css/                      # Styling
-├── templates/               # HTML templates  
-├── screenshots/             # Documentation images
-└── assets/                  # Icons and resources
+├── README.md                  # Main documentation
+├── docs/
+│   └── screenshots/           # Documentation images
+├── js/
+├── css/
+├── templates/
+└── assets/
 ```
 
 ### Contributing
-We welcome contributions! Please read our [development guide](ADVANCED.md#development--customization) for details on:
+We welcome contributions! Please read our [development guide](docs/ADVANCED.md#development--customization) for details on:
 - Setting up the development environment
 - Adding new features
 - Customizing for different AI websites

@@ -1,6 +1,6 @@
 # 🚀 Getting Started with AI Prompt Optimizer
 
-**← [Back to Main README](README.md)** | **[Technical Architecture](ARCHITECTURE.md)** | **[Advanced Guide →](ADVANCED.md)**
+**← [Back to Main README](../README.md)** | **[Technical Architecture](ARCHITECTURE.md)** | **[Advanced Guide →](ADVANCED.md)**
 
 This guide will help you install and start using the AI Prompt Optimizer Chrome extension in just a few minutes.
 
@@ -196,4 +196,4 @@ Now that you're set up, explore these advanced features:
 
 **🎉 You're ready to optimize your AI prompts!**
 
-**← [Back to Main README](README.md)** | **[Technical Architecture](ARCHITECTURE.md)** | **[Advanced Guide →](ADVANCED.md)**
+**← [Back to Main README](../README.md)** | **[Technical Architecture](ARCHITECTURE.md)** | **[Advanced Guide →](ADVANCED.md)**
