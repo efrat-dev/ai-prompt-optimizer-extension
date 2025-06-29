@@ -1,6 +1,6 @@
 # 🔧 Advanced Usage & Development Guide
 
-**← [Getting Started](GETTING-STARTED.md)** | **[Technical Architecture](ARCHITECTURE.md)** | **[Main README](docs/README.md)**
+**← [Getting Started](GETTING-STARTED.md)** | **[Technical Architecture](ARCHITECTURE.md)** | **[Main README](../README.md)**
 
 This guide covers advanced usage, customization, development, and troubleshooting for the AI Prompt Optimizer Chrome extension.
 
