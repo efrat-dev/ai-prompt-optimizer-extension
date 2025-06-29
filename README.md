@@ -10,6 +10,7 @@ Transform your casual AI prompts into professional, domain-specific system promp
 
 - **[Installation & Quick Start](GETTING-STARTED.md)** - Setup guide and basic usage
 - **[Advanced Usage & Development](ADVANCED.md)** - Customization, development, and troubleshooting
+- **[Technical Architecture](ARCHITECTURE.md)** - Understanding the system design
 
 ## 🎯 What It Does
 
@@ -35,21 +36,32 @@ Explain recursion
 ## 🎥 Screenshots & Demo
 
 ### Extension in Action
-![Optimize Button](screenshots/optimize-button.png)
 *The floating optimize button appears on supported AI chat websites*
 
-![API Key Modal](screenshots/api-key-modal.png)
+![Optimize Button](screenshots/optimize-button.png)
+
+
 *Secure API key entry modal*
 
-![Before and After](screenshots/before-after-comparison.png)
+![API Key Modal](screenshots/api-key-modal.png)
+
 *Comparison showing prompt transformation*
+
+**Before**
+
+![Before](screenshots/before.png)
+
+
+**After**
+
+![After](screenshots/after.png)
 
 ### Supported Websites
 | Website | Status | Screenshot |
 |---------|--------|------------|
 | ChatGPT | ✅ Supported | ![ChatGPT](screenshots/chatgpt-integration.png) |
+| OpenAI Chat (without registration) | ✅ Supported | ![OpenAI](screenshots/openai-integration.png) |
 | Claude | ✅ Supported | ![Claude](screenshots/claude-integration.png) |
-| OpenAI Chat | ✅ Supported | ![OpenAI](screenshots/openai-integration.png) |
 
 ## ✨ Key Features
 
